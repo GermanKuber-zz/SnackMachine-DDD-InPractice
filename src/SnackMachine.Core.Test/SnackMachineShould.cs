@@ -39,6 +39,32 @@ namespace SnackMachine.Core.Test
             action.Should().Throw<InvalidOperationException>();
         }
 
+        [Fact]
+        public void Return_Money()
+        {
+            var cent = Money.Cent;
+            _sut.InsertMoney(cent);
+            _sut.ReturnMoney();
+            _sut.TransactionMoney.Should().Be(Money.None);
+        }
+
+        [Fact]
+        public void Sum_from_transaction_money_to_internal_money()
+        {
+            var cent = Money.Cent;
+            _sut.InsertMoney(cent);
+            _sut.Buy();
+            _sut.InternalMoney.Should().Be(Money.Cent);
+        }
+        [Fact]
+        public void Put_in_none_transactional_money()
+        {
+            var cent = Money.Cent;
+            _sut.InsertMoney(cent);
+            _sut.Buy();
+            _sut.TransactionMoney.Should().Be(Money.None);
+        }
+
         //[Fact]
         //public void Insert_Two_Cent_Produce_Error()
         //{

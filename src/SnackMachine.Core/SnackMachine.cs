@@ -12,12 +12,12 @@ namespace SnackMachine.Core
         public void InsertMoney(Money money)
         {
             if (money == Money.None)
-                throw  new InvalidOperationException();
+                throw new InvalidOperationException();
             TransactionMoney += money;
         }
 
 
-        public Money ReturnMoney(Money money) =>
+        public Money ReturnMoney() =>
              TransactionMoney = Money.None;
 
         public void Buy()
