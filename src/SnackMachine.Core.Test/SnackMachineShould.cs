@@ -43,12 +43,12 @@ namespace SnackMachine.Core.Test
 
 
         [Fact]
-        public void Return_Money()
+        public void Return_Same_Money_Inserted()
         {
             var cent = Money.FiftyCents;
             _sut.InsertMoney(cent);
-            _sut.ReturnMoney();
-            _sut.TransactionMoney.Should().Be(Money.None);
+            var returnMoney = _sut.ReturnMoney();
+            returnMoney.Should().Equals(cent);
         }
 
         [Fact]
