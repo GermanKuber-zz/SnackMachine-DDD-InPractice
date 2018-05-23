@@ -4,72 +4,59 @@ namespace SnackMachine.Core
 {
     public sealed class Money : ValueObject<Money>
     {
-        public static readonly Money None = new Money(0, 0, 0, 0, 0, 0);
-        public static readonly Money Cent = new Money(1, 0, 0, 0, 0, 0);
-        public static readonly Money TenCent = new Money(0, 1, 0, 0, 0, 0);
-        public static readonly Money Quarter = new Money(0, 0, 1, 0, 0, 0);
-        public static readonly Money Dollar = new Money(0, 0, 0, 1, 0, 0);
-        public static readonly Money FiveDollar = new Money(0, 0, 0, 0, 1, 0);
-        public static readonly Money TwentyDollar = new Money(0, 0, 0, 0, 0, 1);
+        public static readonly Money None = new Money(0, 0, 0, 0, 0);
+        public static readonly Money FiftyCents = new Money(1, 0, 0, 0, 0);
+        public static readonly Money OnePesos = new Money(0, 1, 0, 0, 0);
+        public static readonly Money TwoPesos = new Money(0, 0, 1, 0, 0);
+        public static readonly Money FivePesos = new Money(0, 0, 0, 1, 0);
+        public static readonly Money TenPesos = new Money(0, 0, 0, 0, 1);
 
-        public int OneCentCount { get; }
-        public int TenCentCount { get; }
-        public int QuarterCount { get; }
-        public int OneDollarCount { get; }
-        public int FiveDollarCount { get; }
-        public int TwentyDollarCount { get; }
+        public int CentsCount { get; }
+        public int OnePesosCount { get; }
+        public int TwoPesosCount { get; }
+        public int FivePesosCount { get; }
+        public int TenPesosCount { get; }
 
-        public decimal Amount =>
-            OneCentCount * 0.01m +
-            TenCentCount * 0.10m +
-            QuarterCount * 0.25m +
-            OneDollarCount +
-            FiveDollarCount * 5 +
-            TwentyDollarCount * 20;
 
-        public Money(int oneCentCount,
-                     int tenCentCount,
-                     int quarterCount,
-                     int oneDollarCount,
-                     int fiveDollarCount,
-                     int twentyDollarCount)
+        public Money(int centsCount, int onePesosCount, int twoPesosCount, int fivePesosCount, int tenPesosCount)
         {
-            ValidateMoney(oneCentCount, tenCentCount, quarterCount, oneDollarCount, fiveDollarCount, twentyDollarCount);
-
-            OneCentCount = oneCentCount;
-            TenCentCount = tenCentCount;
-            QuarterCount = quarterCount;
-            OneDollarCount = oneDollarCount;
-            FiveDollarCount = fiveDollarCount;
-            TwentyDollarCount = twentyDollarCount;
+            ValidateMoney(centsCount, onePesosCount, twoPesosCount, fivePesosCount, tenPesosCount);
+            CentsCount = centsCount;
+            OnePesosCount = onePesosCount;
+            TwoPesosCount = twoPesosCount;
+            FivePesosCount = fivePesosCount;
+            TenPesosCount = tenPesosCount;
         }
 
-        private static void ValidateMoney(int oneCentCount, int tenCentCount, int quarterCount, int oneDollarCount,
-            int fiveDollarCount, int twentyDollarCount)
+
+        private static void ValidateMoney(int centsCount,
+                                            int onePesosCount, 
+                                            int TwoPesosCount, 
+                                            int fivePesosCount,
+                                            int tenPesosCount)
         {
-            if (oneCentCount < 0)
+            if (centsCount < 0)
                 throw new InvalidOperationException();
-            if (tenCentCount < 0)
+            if (onePesosCount < 0)
                 throw new InvalidOperationException();
-            if (quarterCount < 0)
+            if (TwoPesosCount < 0)
                 throw new InvalidOperationException();
-            if (oneDollarCount < 0)
+            if (fivePesosCount < 0)
                 throw new InvalidOperationException();
-            if (fiveDollarCount < 0)
+            if (fivePesosCount < 0)
                 throw new InvalidOperationException();
-            if (twentyDollarCount < 0)
+            if (tenPesosCount < 0)
                 throw new InvalidOperationException();
         }
 
         public static Money operator +(Money money1, Money money2)
         {
             Money sum = new Money(
-                money1.OneCentCount + money2.OneCentCount,
-                money1.TenCentCount + money2.TenCentCount,
-                money1.QuarterCount + money2.QuarterCount,
-                money1.OneDollarCount + money2.OneDollarCount,
-                money1.FiveDollarCount + money2.FiveDollarCount,
-                money1.TwentyDollarCount + money2.TwentyDollarCount);
+                money1.CentsCount + money2.CentsCount,
+                money1.OnePesosCount + money2.OnePesosCount,
+                money1.TwoPesosCount + money2.TwoPesosCount,
+                money1.FivePesosCount + money2.FivePesosCount,
+                money1.TenPesosCount + money2.TenPesosCount);
 
             return sum;
         }
@@ -77,34 +64,31 @@ namespace SnackMachine.Core
         public static Money operator -(Money money1, Money money2)
         {
             return new Money(
-                money1.OneCentCount - money2.OneCentCount,
-                money1.TenCentCount - money2.TenCentCount,
-                money1.QuarterCount - money2.QuarterCount,
-                money1.OneDollarCount - money2.OneDollarCount,
-                money1.FiveDollarCount - money2.FiveDollarCount,
-                money1.TwentyDollarCount - money2.TwentyDollarCount);
+             money1.CentsCount + money2.CentsCount,
+             money1.OnePesosCount + money2.OnePesosCount,
+             money1.TwoPesosCount + money2.TwoPesosCount,
+             money1.FivePesosCount + money2.FivePesosCount,
+             money1.TenPesosCount + money2.TenPesosCount);
         }
 
         protected override bool EqualsCore(Money otherMOney)
         {
-            return OneCentCount == otherMOney.OneCentCount
-                   && TenCentCount == otherMOney.TenCentCount
-                   && QuarterCount == otherMOney.QuarterCount
-                   && OneDollarCount == otherMOney.OneDollarCount
-                   && FiveDollarCount == otherMOney.FiveDollarCount
-                   && TwentyDollarCount == otherMOney.TwentyDollarCount;
+            return CentsCount == otherMOney.CentsCount
+                   && OnePesosCount == otherMOney.OnePesosCount
+                   && TwoPesosCount == otherMOney.TwoPesosCount
+                   && FivePesosCount == otherMOney.FivePesosCount
+                   && TenPesosCount == otherMOney.TenPesosCount;
         }
 
         protected override int GetHashCodeCore()
         {
             unchecked
             {
-                int hashCode = OneCentCount;
-                hashCode = (hashCode * 397) ^ TenCentCount;
-                hashCode = (hashCode * 397) ^ QuarterCount;
-                hashCode = (hashCode * 397) ^ OneDollarCount;
-                hashCode = (hashCode * 397) ^ FiveDollarCount;
-                hashCode = (hashCode * 397) ^ TwentyDollarCount;
+                int hashCode = CentsCount;
+                hashCode = (hashCode * 397) ^ OnePesosCount;
+                hashCode = (hashCode * 397) ^ TwoPesosCount;
+                hashCode = (hashCode * 397) ^ FivePesosCount;
+                hashCode = (hashCode * 397) ^ TenPesosCount;
                 return hashCode;
             }
         }

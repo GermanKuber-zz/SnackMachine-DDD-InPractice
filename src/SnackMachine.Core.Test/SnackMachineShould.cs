@@ -15,7 +15,7 @@ namespace SnackMachine.Core.Test
         [Fact]
         public void Insert_Money()
         {
-            var cent = Money.Cent;
+            var cent = Money.FiftyCents;
             _sut.InsertMoney(cent);
 
             _sut.TransactionMoney.Should().Be(cent);
@@ -24,8 +24,8 @@ namespace SnackMachine.Core.Test
         [Fact]
         public void Insert_Two_Coins()
         {
-            var cent = Money.Cent;
-            var cent2 = Money.Cent;
+            var cent = Money.FiftyCents;
+            var cent2 = Money.FiftyCents;
             _sut.InsertMoney(cent);
             _sut.InsertMoney(cent2);
 
@@ -39,10 +39,13 @@ namespace SnackMachine.Core.Test
             action.Should().Throw<InvalidOperationException>();
         }
 
+
+
+
         [Fact]
         public void Return_Money()
         {
-            var cent = Money.Cent;
+            var cent = Money.FiftyCents;
             _sut.InsertMoney(cent);
             _sut.ReturnMoney();
             _sut.TransactionMoney.Should().Be(Money.None);
@@ -51,15 +54,15 @@ namespace SnackMachine.Core.Test
         [Fact]
         public void Sum_from_transaction_money_to_internal_money()
         {
-            var cent = Money.Cent;
+            var cent = Money.FiftyCents;
             _sut.InsertMoney(cent);
             _sut.Buy();
-            _sut.InternalMoney.Should().Be(Money.Cent);
+            _sut.InternalMoney.Should().Be(Money.FiftyCents);
         }
         [Fact]
         public void Put_in_none_transactional_money()
         {
-            var cent = Money.Cent;
+            var cent = Money.FiftyCents;
             _sut.InsertMoney(cent);
             _sut.Buy();
             _sut.TransactionMoney.Should().Be(Money.None);
